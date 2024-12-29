@@ -14,8 +14,11 @@ const NotFoundPage = lazy(() =>
 import CommonBarLoader from '../CommonBarLoader/CommonBarLoader';
 import GeneralNavigation from '../GeneralNavigaton/GeneralNavigaton';
 import GeneralAuthenticationBar from '../GeneralAuthenticationBar/GeneralAuthenticationBar';
-import CommonModalWindow from "../CommonModalWindow/CommonModalWindow"
-
+import CommonModalWindow from '../CommonModalWindow/CommonModalWindow';
+import GeneralAuthenticationBarLogInForm from '../GeneralAuthenticationBarLogInForm/GeneralAuthenticationBarLogInForm';
+import GeneralAuthenticationBarSignInForm from '../GeneralAuthenticationBarSignInForm/GeneralAuthenticationBarSignInForm';
+import GeneralAuthenticationBarForm from '../GeneralAuthenticationBarForm/GeneralAuthenticationBarForm';
+import { signInElements, logInElements, logOutElements } from '../../constants/auth';
 // import reactLogo from './assets/react.svg'
 // import './App.css'
 
@@ -54,11 +57,32 @@ function App() {
 
       <footer></footer>
 
-      <CommonModalWindow isOpen ={isOpen.logIn} onClose={()=>{onClose(isOpen,"logIn")}}>
-aaaaaaaa
-</CommonModalWindow>
-<CommonModalWindow isOpen ={isOpen.signIn} onClose={()=>{onClose(isOpen,"signIn")}}>aaaaa</CommonModalWindow>
-<CommonModalWindow isOpen ={isOpen.logOut} onClose={()=>{onClose(isOpen,"logOut")}}>aaaaa</CommonModalWindow>
+      <CommonModalWindow
+        isOpen={isOpen.logIn}
+        onClose={() => {
+          onClose(isOpen, 'logIn');
+        }}
+      >
+        <GeneralAuthenticationBarForm elements={logInElements} />
+      </CommonModalWindow>
+
+      <CommonModalWindow
+        isOpen={isOpen.signIn}
+        onClose={() => {
+          onClose(isOpen, 'signIn');
+        }}
+      >
+        <GeneralAuthenticationBarForm elements={signInElements} />
+      </CommonModalWindow>
+
+      <CommonModalWindow
+        isOpen={isOpen.logOut}
+        onClose={() => {
+          onClose(isOpen, 'logOut');
+        }}
+      >
+        <GeneralAuthenticationBarForm elements={logOutElements} />
+      </CommonModalWindow>
     </>
   );
 }
