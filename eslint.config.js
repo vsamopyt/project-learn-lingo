@@ -11,6 +11,7 @@ export default [
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+      process: 'readonly', // Add process explicitly
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
