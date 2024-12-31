@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const slice = createSlice({
-  name: "filters",
+  name: "modals",
   initialState: {
 		
 	},
