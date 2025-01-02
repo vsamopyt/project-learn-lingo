@@ -47,8 +47,6 @@ export const logIn = createAsyncThunk(
   export const logOut = createAsyncThunk(
     'auth/signOut',
     async (_, thunkAPI) => {
-     
-      
       try {
         await  signOut( auth );
   

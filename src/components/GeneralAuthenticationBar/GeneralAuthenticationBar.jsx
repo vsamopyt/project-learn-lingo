@@ -1,27 +1,26 @@
 import CommonButton from '../CommonButton/CommonButton';
 // import css from "./GeneralAuthenticationBar.module.css";
 
-const GeneralAuthenticationBar = ({ onOpen, isOpen }) => {
+const GeneralAuthenticationBar = ({ onOpen }) => {
+    const handleBtn =(event)=>{
+        const btn = event.target.textContent;
+     onOpen(btn)  
+    }
+    
   return (
     <div>
       <CommonButton
-        onHandle={() => {
-          onOpen(isOpen, 'logOut');
-        }}
+        onHandle={handleBtn}
       >
         LogOut
       </CommonButton>
       <CommonButton
-        onHandle={() => {
-          onOpen(isOpen, 'logIn');
-        }}
+        onHandle={handleBtn}
       >
         LogIn
       </CommonButton>
       <CommonButton
-        onHandle={() => {
-          onOpen(isOpen, 'signIn');
-        }}
+        onHandle={handleBtn}
       >
         Registration
       </CommonButton>
