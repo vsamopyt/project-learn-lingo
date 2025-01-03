@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 const HomePage = lazy(() => import('../../pages/HomePage/HomePage'));
@@ -19,6 +19,11 @@ import GeneralAuthenticationBarForm from '../GeneralAuthenticationBarForm/Genera
 import { signInElements, logInElements, logOutElements } from '../../constants/auth';
 // import reactLogo from './assets/react.svg'
 // import './App.css'
+
+import { useDispatch, useSelector } from 'react-redux';
+import {getItems} from "../../redux/teachers/operations"
+// import itemsArray from "../../../teachers.json"
+// import { getDatabase, ref, get,set } from "firebase/database";
 
 function App() {
   // Modal window ------
@@ -55,6 +60,23 @@ function App() {
     }
   }
 const logBtn = getForm(btn);
+
+
+const dispatch =useDispatch();
+// const { items } = useSelector(
+//   state => state.teachers)
+useEffect(()=>{
+ 
+console.log("aaaaaaaaaaaaa");
+dispatch(getItems({startKey: " "}))
+
+
+})
+
+
+
+
+// fffffffffffffffffffffffffffffff
 
   return (
     <>
