@@ -2,11 +2,13 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
+import toast, { Toaster } from 'react-hot-toast';
 import { signUp, logIn, logOut } from '../../redux/auth/operations';
 import { regexEmail } from '../../constants/auth';
 import { GoEye } from 'react-icons/go';
 import { GoEyeClosed } from 'react-icons/go';
-import toast, { Toaster } from 'react-hot-toast';
+
+
 
 const schemaSignUp = yup
   .object({

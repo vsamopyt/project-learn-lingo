@@ -7,7 +7,6 @@ const slice = createSlice({
         user: null,
         isLoading: false,
         isLoggedIn: false,
-        isloading: false,
         isError: false,
         error: null
 	},
