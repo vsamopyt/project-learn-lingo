@@ -53,20 +53,12 @@ function App() {
   };
   const logBtn = getForm(btn);
 
-  // ++++++++++++=++
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getItems({ startKey: ' ' }));
-  });
-
-  // fffffffffffffffffffffffffffffff
 
   return (
     <>
       <header>
         <GeneralNavigation />
-        {/* <GeneralAuthenticationBar /> */}
+ 
         <GeneralAuthenticationBar onOpen={onOpen} isOpen={isOpen} />
       </header>
 
@@ -75,14 +67,12 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/teachers" element={<TeachersPage />} />
-            {/* <Route path="/Favourites" element={<FavouritesPage /> } /> */}
             <Route
               path="/Favourites"
               element={
                 <PrivateRoute component={<FavouritesPage />} redirectTo="/" />
               }
             />
-            {/* <PrivateRoute component={<FavouritesPage />} redirectTo="/" /> */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
