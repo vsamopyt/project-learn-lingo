@@ -8,6 +8,7 @@ import {
   selectTotalItems,
 } from '../../redux/teachers/selectors';
 import CommonButton from '../../components/CommonButton/CommonButton';
+import  TeachersFilter from "../../components/TeachersFilter/TeachersFilter"
 import TeachersList from '../../components/TeachersList/TeachersList';
 import { selectStartKey } from '../../redux/filters/selectors';
 import { updateStartKey } from '../../redux/filters/slice';
@@ -19,6 +20,9 @@ const TeachersPage = () => {
   const startKey = useSelector(selectStartKey);
   const savedItems = useSelector(selectSavedItems);
   const allItems = useSelector(selectTotalItems);
+
+
+  
 
   const isLoadBtn = savedItems < allItems && savedItems + 4 < allItems;
 
@@ -40,6 +44,8 @@ const TeachersPage = () => {
       console.log(!isLoadBtn && allItems !== 0);
       toast('Sorry. There are no more teachers available.');
     }
+
+
     return;
   }, [isLoadBtn, teachers]);
 
@@ -47,6 +53,7 @@ const TeachersPage = () => {
     <>
       <section aria-label="filters">
         <h2>Filters</h2>
+<TeachersFilter/>
       </section>
       <section>
         <h1>Our Teachers</h1>
