@@ -10,8 +10,9 @@ import {
 import CommonButton from '../../components/CommonButton/CommonButton';
 import  TeachersFilter from "../../components/TeachersFilter/TeachersFilter"
 import TeachersList from '../../components/TeachersList/TeachersList';
-import { selectStartKey } from '../../redux/filters/selectors';
-import { updateStartKey } from '../../redux/filters/slice';
+import {selectFilter} from '../../redux/filters/selectors';
+import { selectStartKey, selectHasFilter } from '../../redux/teachers/selectors';
+import { updateStartKey, updateHasFilter } from '../../redux/teachers/slice';
 import css from './TeachersPage.module.css';
 
 const TeachersPage = () => {
@@ -20,9 +21,10 @@ const TeachersPage = () => {
   const startKey = useSelector(selectStartKey);
   const savedItems = useSelector(selectSavedItems);
   const allItems = useSelector(selectTotalItems);
+  const filters =   useSelector(selectFilter);
+  const hasFilter =   useSelector(selectHasFilter);
 
 
-  
 
   const isLoadBtn = savedItems < allItems && savedItems + 4 < allItems;
 
@@ -31,9 +33,12 @@ const TeachersPage = () => {
 
     dispatch(updateStartKey(newStartKey));
   };
+
+
+
   useEffect(() => {
-    dispatch(getItems({ startKey }));
-  }, [startKey]);
+    dispatch(getItems({ startKey, filters  }));
+  }, [startKey, filters ]);
 
   useEffect(() => {
     dispatch(getAllItems());
@@ -58,7 +63,7 @@ const TeachersPage = () => {
       <section>
         <h1>Our Teachers</h1>
         <TeachersList teachers={teachers} />
-        {isLoadBtn && 
+        {isLoadBtn && !hasFilter &&
           <CommonButton onHandle={handleBtn}>Load More</CommonButton>
         }
       </section>

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import TeachersFilterSelect from '../TeachersFilterSelect/TeachersFilterSelect';
 import { selectFilter } from '../../redux/filters/selectors';
 import { updateFilter } from '../../redux/filters/slice';
+import { updateHasFilter } from '../../redux/teachers/slice';
 import { languages, levels, price } from '../../constants/filters';
 
 const TeachersFilter = () => {
@@ -12,6 +13,8 @@ const TeachersFilter = () => {
   const dispatch = useDispatch();
   const onSubmit = formData => {
     dispatch(updateFilter(formData));
+    dispatch(updateHasFilter(formData))
+
   };
 
   useEffect(() => {
@@ -39,7 +42,7 @@ const TeachersFilter = () => {
         register={register}
         category={'price'}
       />
-      
+
       <input type="submit" />
     </form>
   );

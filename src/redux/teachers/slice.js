@@ -5,6 +5,8 @@ const slice = createSlice({
   name: 'teachers',
   initialState: {
     items: [],
+    startKey: ' ',
+    hasFilter: false,
     totalAvailableItems: 0,
     totalSavedItems: 0,
     isLoading: false,
@@ -12,7 +14,26 @@ const slice = createSlice({
     error: null,
   },
 
-  reducers: {},
+  reducers: {
+    updateStartKey: (state, action) => {
+  
+        state.startKey = action.payload;
+     
+      // state.startKey = action.payload;
+    },
+    updateHasFilter: (state, action) => {
+      const hasFilter = Object.values(action.payload).some(
+        filter => filter !== '' && filter !== null && filter !== undefined
+      );
+      state.hasFilter = hasFilter;
+
+      if(state.hasFilter) {
+        state.startKey = ' ';
+      }
+    },
+  },
+
+  // reducers: {},
   extraReducers: builder => {
     builder
       .addCase(getItems.pending, state => {
@@ -22,17 +43,27 @@ const slice = createSlice({
       .addCase(getItems.fulfilled, (state, action) => {
         state.isLoading = false;
 
-        const newItems = action.payload.filter(
-          newItem => !state.items.some(oldItem => oldItem.key === newItem.key)
-        );
+        console.log(state.startKey);
 
-        if (state.items.length > 0) {
-          state.items = [...state.items, ...newItems];
-          state.totalSavedItems = state.items.length;
-        } else {
+        if (state.hasFilter) {
           state.items = action.payload;
-          state.totalSavedItems = action.payload.length;
+        } else {
+          if(state.startKey === ' ') {
+            state.items=[]
+          }
+          const newItems = action.payload.filter(
+            newItem => !state.items.some(oldItem => oldItem.key === newItem.key)
+          );
+
+          if (state.items.length > 0) {
+            state.items = [...state.items, ...newItems];
+            state.totalSavedItems = state.items.length;
+          } else {
+            state.items = action.payload;
+            state.totalSavedItems = action.payload.length;
+          }
         }
+
 
         state.error = null;
       })
@@ -59,6 +90,6 @@ const slice = createSlice({
   },
 });
 
-export const {} = slice.actions;
+export const { updateStartKey,  updateHasFilter } = slice.actions;
 
 export default slice.reducer;
