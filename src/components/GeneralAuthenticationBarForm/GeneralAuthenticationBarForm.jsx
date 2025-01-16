@@ -8,6 +8,9 @@ import { regexEmail } from '../../constants/auth';
 import { GoEye } from 'react-icons/go';
 import { GoEyeClosed } from 'react-icons/go';
 
+import { initializeUser } from '../../redux/auth/operations';
+import {encodeEmail} from "../../utils/codingUserEmail"
+
 
 
 const schemaSignUp = yup
@@ -65,6 +68,11 @@ export default function GeneralAuthenticationBarForm({ elements, onClose }) {
       if (elements.some(el => el.value === 'Sign Up')) {
         await dispatch(signUp(data)).unwrap();
         toast.success('You signed in successfully!');
+        console.log(encodeEmail(data.email));
+        const email = encodeEmail(data.email)
+        await dispatch(initializeUser({ userEmail: email})).unwrap();
+        // await dispatch(signUp(data)).unwrap();
+        // 
       } else if (elements.some(el => el.value === 'Log In')) {
         await dispatch(logIn(data)).unwrap();
         toast.success('You logged in successfully!');

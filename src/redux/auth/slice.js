@@ -1,14 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {signUp, logIn, logOut} from "./operations";
+import {signUp, logIn, logOut, initializeUser} from "./operations";
 
 const slice = createSlice({
   name: "auth",
   initialState: {
         user: null,
+        encodedUser: null,
         isLoading: false,
         isLoggedIn: false,
         isError: false,
-        error: null
+        error: null, 
+        isInitialized: false,
 	},
 
   reducers: { },
@@ -23,6 +25,7 @@ const slice = createSlice({
         state.isLoading = false;
         state.user = action.payload;
         state.error = null;
+        state.isLoggedIn =true;
 
       })
       .addCase(signUp.rejected, (state, action) => {
@@ -54,13 +57,38 @@ const slice = createSlice({
         state.user = null;
         state.isLoggedIn =false;
         state.error = null;
+        state.isInitialized = false;
+        state.encodedUser= null;
       })
       .addCase(logOut.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.error = action.payload;
+       
       })
+      .addCase(initializeUser.pending, state => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(initializeUser.fulfilled, (state, action) => {
+        state.isInitialized = true;
+        state.isLoading = false; 
+        state.encodedUser= action.payload;
+        
+        
+        state.error = null;
+      })
+      .addCase(initializeUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        console.log(action.payload);
+        state.error = action.payload;
+      })
+
     }
+
+
+
 });
 
 export const {  } = slice.actions;

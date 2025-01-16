@@ -88,7 +88,6 @@ export const getItems = createAsyncThunk(
       filter => filter !== '' && filter !== null && filter !== undefined
     );
 
-    console.log(hasFilter);
 
     try {
       if (!hasFilter) {

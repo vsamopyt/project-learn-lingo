@@ -39,11 +39,12 @@ const slice = createSlice({
       .addCase(getItems.pending, state => {
         state.isLoading = true;
         state.isError = false;
+   
+        
       })
       .addCase(getItems.fulfilled, (state, action) => {
         state.isLoading = false;
-
-        console.log(state.startKey);
+      
 
         if (state.hasFilter) {
           state.items = action.payload;
@@ -74,11 +75,11 @@ const slice = createSlice({
         state.error = action.payload;
       })
       .addCase(getAllItems.pending, state => {
-        state.isLoading = true;
+        // state.isLoading = true;
         state.isError = false;
       })
       .addCase(getAllItems.fulfilled, (state, action) => {
-        state.isLoading = false;
+        // state.isLoading = false;
         state.totalAvailableItems = action.payload;
         state.error = null;
       })

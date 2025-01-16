@@ -3,7 +3,7 @@ import css from "./CommonButton.module.css";
 const CommonButton =({onHandle, children, classButton})=>{
 
     return (
-        <button onClick={onHandle}  className={classButton}>
+        <button type ="button" onClick={onHandle}  className={classButton}>
          {children}
         </button>
     )
