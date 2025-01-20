@@ -4,6 +4,7 @@ import {
   ref,
   update,
   query,
+  remove,
   orderByKey,
   startAt,
   startAfter,
@@ -13,60 +14,33 @@ import {
 } from 'firebase/database';
 
 
-
-export const addUser = createAsyncThunk(
-    'favourites/addUser',
-    async (newUser, thunkAPI) => {
-        console.log();
-        
-        const {userEmail} = newUser;
-        console.log(userEmail);
-        const user = {[`users/${userEmail}`]:{ isInitialized: true } };
-     
+export const addFavouriteItem = createAsyncThunk(
+    'favourites/addFavouriteItem',
+    async (reqParams, thunkAPI) => {
+const {item, encodedUser} = reqParams;
         const db = getDatabase(); // Получение базы данных
-        const itemsRef = ref(db); // Ссылка на коллекцию
-
-        console.log(user);
-        
+        const itemsRef = ref(db, `users/${encodedUser}/${item.key}`); // Ссылка на коллекцию
     
         try {
-            update(itemsRef, user)
+            update(itemsRef, item);
+            return item;
         } catch (error) {
           return thunkAPI.rejectWithValue(error.message);
         }
-
-
-    }
-     
-  );
-
-export const addItem = createAsyncThunk(
-    'favourites/addItem',
-    async (newItem, thunkAPI) => {
-
-        const db = getDatabase(); // Получение базы данных
-        const itemsRef = ref(db, 'users'); // Ссылка на коллекцию
-    
-        try {
-            update(itemsRef, newItem)
-        } catch (error) {
-          return thunkAPI.rejectWithValue(error.message);
-        }
-
-
-    }
-     
+    }  
   );
   
 
   export const getFavouriteItems = createAsyncThunk(
     'favourites/getFavouriteItems',
     async (user, thunkAPI) => {
-const {userEmail} =user
+const { email} =user
+console.log(email);
+
         const db = getDatabase(); // Получение базы данных
-        // const itemsRef = ref(db, `users/${userEmail}`); // Ссылка на коллекцию
-                const itemsRef = ref(db, `users`); // Ссылка на коллекцию
-        console.log(itemsRef);
+     
+                const itemsRef = ref(db, `users/${email}`); // Ссылка на коллекцию
+        
         
         let dataQuery;
         try {
@@ -75,10 +49,14 @@ const {userEmail} =user
             if (snapshot.exists()) {
                 const data = snapshot.val();
                 console.log(data);
-                
-                return Object.keys(data).length;
+                const rawData = Object.entries(data).map(([key, value]) => ({
+                  key,
+                  ...value,
+                })).filter(item => item.key !== "isInitialized");
+               return rawData;
+             
               } else {
-                console.log("mistake");
+                // console.log("mistake");
                 
                 return [];
               }
@@ -91,6 +69,23 @@ const {userEmail} =user
     }
      
   );
+
+  export const deleteFavouriteItem = createAsyncThunk(
+    'favourites/deleteFavouriteItem',
+    async (reqParams, thunkAPI) => {
+const {item, encodedUser} = reqParams;
+        const db = getDatabase(); // Получение базы данных
+        const itemsRef = ref(db, `users/${encodedUser}/${item.key}`); // Ссылка на коллекцию
+    
+        try {
+            remove(itemsRef);
+            return item.key;
+        } catch (error) {
+          return thunkAPI.rejectWithValue(error.message);
+        }
+    }  
+  );
+  
   
 
  

@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import {encodeEmail} from "../../utils/codingUserEmail"
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -59,10 +60,10 @@ export const logOut = createAsyncThunk('auth/signOut', async (_, thunkAPI) => {
 export const initializeUser = createAsyncThunk(
   'auth/initializeUser',
   async (newUser, thunkAPI) => {
-    console.log();
+
 
     const { userEmail } = newUser;
-    console.log(userEmail);
+ 
     const user = { [`users/${userEmail}`]: { isInitialized: true } };
 
     const db = getDatabase(); // Получение базы данных
@@ -74,6 +75,33 @@ export const initializeUser = createAsyncThunk(
       await update(itemsRef, user);
       return userEmail;
       
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+
+export const getUser = createAsyncThunk(
+  'auth/getUser',
+  async (user, thunkAPI) => {
+    const {email } = user;
+    const encodedEmail = encodeEmail(email)
+    const db = getDatabase(); // Получение базы данных
+    const itemsRef = ref(db, `users/${encodedEmail}`); // Ссылка на коллекцию
+
+    let dataQuery;
+
+    try {
+      dataQuery = query(itemsRef);
+      const snapshot = await get(dataQuery);
+
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        return [Object.values(data), encodedEmail ];
+      } else {
+        return [];
+      }
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }

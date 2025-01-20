@@ -3,14 +3,16 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast';
-import { signUp, logIn, logOut } from '../../redux/auth/operations';
+import { signUp, logIn, logOut, getUser } from '../../redux/auth/operations';
 import { regexEmail } from '../../constants/auth';
 import { GoEye } from 'react-icons/go';
 import { GoEyeClosed } from 'react-icons/go';
 
 import { initializeUser } from '../../redux/auth/operations';
-import {encodeEmail} from "../../utils/codingUserEmail"
-
+import { encodeEmail } from '../../utils/codingUserEmail';
+import { getFavouriteItems } from '../../redux/favourites/operations';
+// import {selectEncodedUser} from 
+import { selectEncodedUser } from '../../redux/auth/selectors';
 
 
 const schemaSignUp = yup
@@ -31,7 +33,6 @@ const schemaLogIn = yup
 const schemaLogOut = yup.object({}).required();
 
 const getShema = (elements, schemaSignUp, schemaLogIn, schemaLogOut) => {
-
   switch (elements.length) {
     case 4:
       return schemaSignUp;
@@ -49,7 +50,7 @@ const getShema = (elements, schemaSignUp, schemaLogIn, schemaLogOut) => {
 
 export default function GeneralAuthenticationBarForm({ elements, onClose }) {
   const schema = getShema(elements, schemaSignUp, schemaLogIn, schemaLogOut);
-
+  const email = useSelector(selectEncodedUser);
   const {
     register,
     handleSubmit,
@@ -69,13 +70,19 @@ export default function GeneralAuthenticationBarForm({ elements, onClose }) {
         await dispatch(signUp(data)).unwrap();
         toast.success('You signed in successfully!');
         console.log(encodeEmail(data.email));
-        const email = encodeEmail(data.email)
-        await dispatch(initializeUser({ userEmail: email})).unwrap();
+        const email = encodeEmail(data.email);
+        await dispatch(initializeUser({ userEmail: email })).unwrap();
         // await dispatch(signUp(data)).unwrap();
-        // 
+        //
       } else if (elements.some(el => el.value === 'Log In')) {
         await dispatch(logIn(data)).unwrap();
         toast.success('You logged in successfully!');
+        await dispatch(getUser(data)).unwrap();
+        // const email = useSelector(selectEncodedUser);
+        const user = encodeEmail(data.email);
+        
+        await dispatch(getFavouriteItems({email:user})).unwrap()
+
       } else if (elements.some(el => el.value === 'Log Out')) {
         await dispatch(logOut()).unwrap();
         toast.success('You logged out in successfully!');

@@ -80,7 +80,7 @@ function App() {
 
       <footer></footer>
 
-      <CommonModalWindow isOpen={isOpen} np onClose={onClose}>
+      <CommonModalWindow isOpen={isOpen}  onClose={onClose}>
         <GeneralAuthenticationBarForm
           elements={logBtn}
           onClose={() => {
